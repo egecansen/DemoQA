@@ -2,6 +2,8 @@ package pages;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import pages.component.DatePicker;
+import pages.component.SubmissionRow;
 import utilities.Utils;
 import java.util.List;
 
@@ -23,7 +25,7 @@ public class PracticeFormPage extends Utils {
     public List<WebElement> genderButtons;
 
     @FindBy (id = "dateOfBirthInput")
-    public WebElement datePicker;
+    public WebElement dateOfBirth;
 
     @FindBy (css = "[class='react-datepicker__month-select'] option")
     public List<WebElement> months;
@@ -37,7 +39,7 @@ public class PracticeFormPage extends Utils {
     @FindBy (id = "subjectsInput")
     public WebElement subjectBox;
 
-    @FindBy(css = "[id=\"subjectsContainer\"] #react-select-2-option-0")
+    @FindBy(css = "#subjectsContainer #react-select-2-option-0")
     public WebElement subjectSpawnBox;
 
     @FindBy (css = "[for*='hobbies-checkbox']")
@@ -58,35 +60,20 @@ public class PracticeFormPage extends Utils {
     @FindBy (id = "submit")
     public WebElement submitButton;
 
-    @FindBy (css = "[class=\"table-responsive\"] tr td +td")
-    public List<WebElement> submittedUserInfo;
+    @FindBy (id = "dateOfBirthInput")
 
+    public WebElement dateOfBirthInput;
+    @FindBy(css = ".react-datepicker__month-container")
+    public DatePicker datePicker;
 
-    public void dateOfBirth(String day, String month, String year) {
-        scrollAndClick(datePicker);
-        clickElementUntil(getMonth(month));
-        clickElementUntil(getYear(year));
-        clickElementUntil(getDay(day));
-    }
+    @FindBy(css = ".modal-body tbody tr")
+    public List<SubmissionRow> submissionRows;
 
-    public WebElement getMonth(String monthName){
-        for (WebElement month : months) if (month.getText().equals(monthName)) return month;
-        throw new RuntimeException("Month not found");
-    }
-
-    public WebElement getYear(String yearName){
-        for (WebElement year : years) if (year.getText().equals(yearName)) return year;
-        throw new RuntimeException("Year not found");
-    }
-
-    public WebElement getDay(String dayName){
-        for (WebElement day : days) {
-            if (!day.getText().equals(dayName)) {
-                dayName = dayName.replace("0", "");
-            }
-            if (day.getText().equals(dayName))
-                return day;
+    public SubmissionRow getSubmissionRow(String label) {
+        for (SubmissionRow row: submissionRows) {
+            if (row.getLabel().equals(label))
+                return row;
         }
-        throw new RuntimeException("Day not found");
+        throw new RuntimeException("Row not found!!");
     }
 }

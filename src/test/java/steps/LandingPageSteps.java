@@ -12,7 +12,6 @@ public class LandingPageSteps {
     @Given("Select the card named {} on the landing page")
     public void clickCard(String labelText) throws InterruptedException {
         //Setting window size for unreachable elements.
-        landingPage.setWindowSize(720,8000);
         landingPage.clickElementUntil(landingPage.getElementFromList(labelText, landingPage.categories));
     }
 }

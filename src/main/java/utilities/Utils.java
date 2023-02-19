@@ -1,5 +1,7 @@
 package utilities;
 
+import com.github.webdriverextensions.WebComponent;
+import com.github.webdriverextensions.WebDriverExtensionFieldDecorator;
 import driver.Driver;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.CookieSpecs;
@@ -25,14 +27,22 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import static resources.Colors.*;
 
-public abstract class Utils {
+
+public abstract class Utils extends WebComponent {
 
     public final Printer log = new Printer(this.getClass());
     public int counter;
 
     public Utils() {
-        PageFactory.initElements(Driver.driver, this);
+        PageFactory.initElements(new WebDriverExtensionFieldDecorator(Driver.driver), this);
+    }
+
+    public void waitFor(double seconds){
+        if (seconds > 1) log.new Info("Waiting for "+BLUE+seconds+GRAY+" seconds");
+        try {Thread.sleep((long) (seconds* 1000L));}
+        catch (InterruptedException exception){Assert.fail(GRAY+exception.getLocalizedMessage()+RESET);}
     }
 
     public void scroll(WebElement element) {
@@ -62,6 +72,60 @@ public abstract class Utils {
         for (WebElement element : elements) {
             clickElementUntil(element);
         }
+    }
+
+    public WebElement centerElement(WebElement element){
+        String scrollScript = "var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);"
+                + "var elementTop = arguments[0].getBoundingClientRect().top;"
+                + "window.scrollBy(0, elementTop-(viewPortHeight/2));";
+
+        ((JavascriptExecutor) Driver.driver).executeScript(scrollScript, element);
+
+        waitFor(0.3);
+        return element;
+    }
+
+    public void dragDropToAction(WebElement element, WebElement destinationElement){
+
+        centerElement(element);
+
+        Actions action = new Actions(Driver.driver);
+        action.moveToElement(element)
+                .clickAndHold(element)
+                .moveToElement(destinationElement)
+                .release()
+                .build()
+                .perform();
+        waitFor(0.3);
+    }
+
+    //This method performs click, hold, dragAndDropBy action on at a certain offset
+    public void dragDropByAction(WebElement element, int xOffset, int yOffset){
+
+        centerElement(element);
+
+        Actions action = new Actions(Driver.driver);
+        action.moveToElement(element)
+                .clickAndHold(element)
+                .dragAndDropBy(element, xOffset, yOffset)
+                .build()
+                .perform();
+        waitFor(0.3);
+    }
+
+    //This method performs click, hold, drag and drop action on at a certain offset
+    public void dragDropAction(WebElement element, int xOffset, int yOffset){
+
+        centerElement(element);
+
+        Actions action = new Actions(Driver.driver);
+        action.moveToElement(element)
+                .clickAndHold(element)
+                .moveToElement(element,xOffset,yOffset)
+                .release()
+                .build()
+                .perform();
+        waitFor(0.3);
     }
 
     public void scrollThruCenter(WebElement element) {

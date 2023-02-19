@@ -12,18 +12,12 @@
   <url>http://www.example.com</url>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
     <java.version>17</java.version>
     <browser>Chrome</browser>
     <name>${project.name}</name>
-    <maven.surefire.version>2.22.1</maven.surefire.version>
     <cucumber.version>7.10.1</cucumber.version>
     <selenium.version>4.7.1</selenium.version>
   </properties>
-
-
 
   <dependencies>
     <!-- Cucumber -->
@@ -76,7 +70,7 @@
     <dependency>
       <groupId>io.github.umutayb</groupId>
       <artifactId>Utilities</artifactId>
-      <version>1.2.4</version>
+      <version>1.2.6</version>
     </dependency>
 
     <!-- Web Driver Extensions -->
@@ -102,11 +96,7 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.12.6.1</version>
     </dependency>
-    <dependency>
-      <groupId>io.github.umutayb</groupId>
-      <artifactId>Pickleib</artifactId>
-      <version>1.5.4</version>
-    </dependency>
+
   </dependencies>
 
   <build>
