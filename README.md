@@ -3,7 +3,7 @@ In this project, i created a UI automation framework, using _**Selenium & Cucumb
 
 ## Run on terminal
 
-- Go to project folder on terminal
+- Go to project directory in terminal
 
 - Submit `mvn clean test`
 
@@ -12,3 +12,4 @@ In this project, i created a UI automation framework, using _**Selenium & Cucumb
     ```yml
     mvn clean test @SCN-DemoQA-Form-1
     ```
+- You can decide the which driver you are going to use by changing the driver tags in scenarios.
