@@ -11,7 +11,7 @@ In this project, i created a UI automation framework, using _**Selenium & Cucumb
     ```
 - To run a specific scenario you can use the scenario tags:
     ```yml
-    mvn clean test @SCN-DemoQA-Form-1
+    mvn clean test @SCN-DemoQA-1
     ```
 - To select a driver type, change the driver tags in scenarios.
 - Tests can run _headless_ by modifying the headless property in test.properties.
