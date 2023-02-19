@@ -9,7 +9,8 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 @CucumberOptions(
         features = {"src/test/java/features"},
-        glue = {"steps"}
+        glue = {"steps"},
+        publish = true
 )
 public class AppTest {
 }
