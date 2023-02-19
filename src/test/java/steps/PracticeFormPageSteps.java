@@ -1,17 +1,13 @@
 package steps;
 
-import com.github.webdriverextensions.WebDriverExtensionFieldDecorator;
-import driver.Driver;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.support.PageFactory;
 import pages.PracticeFormPage;
-import pages.component.SubmissionRow;
 import utilities.ContextStore;
 import utils.FileUtilities;
-
 import java.io.File;
 import java.util.Map;
 
