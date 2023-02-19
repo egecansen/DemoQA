@@ -5,7 +5,7 @@ In this project, i created a UI automation framework, using _**Selenium & Cucumb
 
 - Go to project folder on terminal
 
-- Sumbit `mvn clean test`
+- Submit `mvn clean test`
 
 - To run a specific scenario you can use the scenario tags:
 
