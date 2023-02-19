@@ -74,6 +74,18 @@ public abstract class Utils extends WebComponent {
         }
     }
 
+    public void clickAtAnOffset(WebElement element, int xOffset, int yOffset, boolean scroll){
+
+        if (scroll) centerElement(element);
+
+        Actions builder = new org.openqa.selenium.interactions.Actions(Driver.driver);
+        builder
+                .moveToElement(element, xOffset, yOffset)
+                .click()
+                .build()
+                .perform();
+    }
+
     public WebElement centerElement(WebElement element){
         String scrollScript = "var viewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);"
                 + "var elementTop = arguments[0].getBoundingClientRect().top;"

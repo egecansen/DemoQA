@@ -1,6 +1,6 @@
 Feature: DemoQA
   @Web-UI @Chrome @SCN-DemoQA-1
-  Scenario: Submit form
+  Scenario: Submit the form
     * Navigate to https://demoqa.com/
     * Select the card named Forms on the landing page
     * Select Practice Form from the selected card menu
@@ -31,9 +31,11 @@ Feature: DemoQA
     * Verify the submitted value of State and City on the submission modal
     * Wait 3 seconds
 
-  Scenario: Drag drop
+  @Web-UI @Chrome @SCN-DemoQA-2
+  Scenario: Slider interaction
     * Navigate to https://demoqa.com/
     * Select the card named Widgets on the landing page
     * Select Slider from the selected card menu
-    * Slide to 60
-    * Wait 5 seconds
+    * Set window size to 10000, 10000
+    * Slide the slider to 44
+    * Wait 3 seconds

@@ -1,25 +1,39 @@
 package steps;
 
+import driver.Driver;
 import io.cucumber.java.en.Given;
-import org.openqa.selenium.Keys;
+import org.junit.Assert;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import pages.SliderPage;
+
+import java.time.Duration;
 
 
 public class SliderSteps {
     SliderPage sliderPage = new SliderPage();
-    @Given("Slide")
-    public void slide() {
-        int sliderWidth = sliderPage.sliderButton.getSize().getWidth();
-        int sliderHeight = sliderPage.sliderButton.getSize().getHeight();
-        int yCoord = sliderPage.sliderButton.getLocation().getY();
-        int xCoord = sliderPage.sliderButton.getLocation().getX();
-        sliderPage.log.new Info("Sliding");
-        sliderPage.dragDropAction(sliderPage.sliderButton, (xCoord), yCoord);
+
+    @Given("Slide the slider to {}")
+    public void sliderInteraction(int value){
+        WebElement slider = sliderPage.sliderButton;
+        int initialValue = Integer.parseInt(slider.getAttribute("value"));
+        int sliderLength = slider.getSize().width;
+        int slideDistance = (value - initialValue) * sliderLength / 100;
+        int initialX = (sliderLength * initialValue)/100;
+        int initialXOffset = initialX - sliderLength/2;
+
+        Actions action = new Actions(Driver.driver);
+        action.moveToElement(slider, initialXOffset, 0)
+                .clickAndHold()
+                .moveByOffset((slideDistance),0)
+                .release()
+                .pause(Duration.ofSeconds(1))
+                .build()
+                .perform();
+
+        int finalValue = Integer.parseInt(slider.getAttribute("value"));
+        Assert.assertEquals("Slider value is incorrect!", value, finalValue);
+        sliderPage.log.new Success("Final value is verified to be: " + finalValue);
     }
-    @Given("Slide to {}")
-    public void sendKeysToSlider(int count){
-        count = count - 25;
-        sliderPage.log.new Info("Navigating slide to %" + count);
-        sliderPage.clickElementUntil(sliderPage.sliderButton);
-    }
+
 }
