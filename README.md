@@ -14,4 +14,4 @@ In this project, i created a UI automation framework, using _**Selenium & Cucumb
     mvn clean test @SCN-DemoQA-1
     ```
 - To select a driver type, change the driver tags in scenarios.
-- Tests can be run _headless_ by modifying the headless property in test.properties.
+- Tests can be run headless by modifying the headless property in _test.properties_.
