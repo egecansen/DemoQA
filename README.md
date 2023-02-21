@@ -9,7 +9,7 @@ In this project, i created a UI automation framework, using _**Selenium & Cucumb
     ```yml
     mvn clean test
     ```
-- To run a specific scenario you can use the scenario tags:
+- To run a specific scenario use the scenario tags:
     ```yml
     mvn clean test -q -Dcucumber.filter.tags="@SCN-DemoQA-1"
     ```
