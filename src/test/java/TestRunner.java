@@ -13,5 +13,5 @@ import org.junit.runner.RunWith;
         glue = {"steps"},
         publish = true
 )
-public class AppTest {
+public class TestRunner {
 }
