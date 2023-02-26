@@ -1,4 +1,4 @@
-package pages.component;
+package pages.components;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -7,6 +7,7 @@ import utilities.Utils;
 import java.util.List;
 
 public class DatePicker extends Utils {
+
     @FindBy(css = ".react-datepicker__year-select option")
     public List<WebElement> years;
 

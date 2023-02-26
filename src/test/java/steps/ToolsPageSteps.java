@@ -9,6 +9,6 @@ public class ToolsPageSteps {
 
     @Given("Select {} from the selected card menu")
     public void clickItem(String toolText) {
-        toolsPage.scrollAndClick(toolsPage.getElementFromList(toolText, toolsPage.tools));
+        toolsPage.clickElementUntil(true, toolsPage.getElementFromList(toolText, toolsPage.tools));
     }
 }

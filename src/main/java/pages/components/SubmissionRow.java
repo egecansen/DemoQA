@@ -1,11 +1,8 @@
-package pages.component;
+package pages.components;
 
 
-import com.github.webdriverextensions.WebComponent;
-import driver.Driver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import utilities.Utils;
 
 public class SubmissionRow extends Utils {

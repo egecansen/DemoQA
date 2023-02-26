@@ -1,17 +1,19 @@
 package steps;
 
+import bookstore.BookStoreAuthorization;
+import bookstore.models.CredentialModel;
+import bookstore.models.TokenResponse;
+import bookstore.models.UserResponse;
 import driver.Driver;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
-import io.cucumber.java.Scenario;
+import io.cucumber.java.*;
 import io.cucumber.java.en.Given;
+import utilities.TestStore;
 import utilities.Utils;
 
-import java.util.Arrays;
+import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import static driver.Driver.DriverType.chrome;
 
 
@@ -20,12 +22,27 @@ public class CommonSteps extends Utils {
     public Scenario scenario;
     public boolean authenticate;
     public boolean initialiseBrowser;
-
+    BookStoreAuthorization bookStoreAuth = new BookStoreAuthorization();
+    ObjectMapper objectMapper = new ObjectMapper();
     @Before
     public void before(Scenario scenario) {
         log.new Warning("Running: " + scenario.getName());
         processScenarioTags(scenario);
         if (initialiseBrowser) Driver.setup(getDriverType(scenario));
+        if (scenario.getSourceTagNames().contains("@Authenticate")) {
+            CredentialModel user = new CredentialModel("Tillerman");
+            user.setPassword("Tillerman1*");
+
+            UserResponse userResponse = BookStoreAuthorization.createUser(user);
+            TestStore.put("contextUser", user);
+            TestStore.put("userId", userResponse.getUserID());
+
+            TestStore.put("userName", userResponse.getUsername());
+            TestStore.put("password", user.getPassword());
+
+            TokenResponse tokenResponse = BookStoreAuthorization.generateToken(user);
+            TestStore.put("token", tokenResponse.getToken());
+        }
     }
 
     public void processScenarioTags(Scenario scenario){
@@ -35,13 +52,21 @@ public class CommonSteps extends Utils {
         initialiseBrowser = scenario.getSourceTagNames().contains("@Web-UI");
     }
 
+    @SuppressWarnings("unused")
+    @DefaultParameterTransformer
+    @DefaultDataTableEntryTransformer
+    @DefaultDataTableCellTransformer
+    public Object transformer(Object fromValue, Type toValueType) {
+        return objectMapper.convertValue(fromValue, objectMapper.constructType(toValueType));
+    }
+
     @After
     public void after(Scenario scenario) {
-        Driver.quitDriver();
-        if (!initialiseBrowser){
-            if (scenario.isFailed()) throw new RuntimeException(scenario.getName() + ": FAILED!");
-            else log.new Success(scenario.getName() + ": PASS!");
+        if (initialiseBrowser) {
+            Driver.quitDriver();
         }
+        if (scenario.isFailed()) throw new RuntimeException(scenario.getName() + ": FAILED!");
+        else log.new Success(scenario.getName() + ": PASS!");
     }
 
     public Driver.DriverType getDriverType(Scenario scenario) {

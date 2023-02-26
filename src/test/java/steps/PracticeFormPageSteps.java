@@ -6,7 +6,7 @@ import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import pages.PracticeFormPage;
-import utilities.ContextStore;
+import utilities.TestStore;
 import utils.FileUtilities;
 import java.io.File;
 import java.util.Map;
@@ -26,44 +26,44 @@ public class PracticeFormPageSteps {
 
         practiceForm.scrollAndSendKeys(practiceForm.firstName, userMap.get("First Name"));
         practiceForm.scrollAndSendKeys(practiceForm.lastName, userMap.get("Last Name"));
-        ContextStore.put("Student Name", userMap.get("First Name") + " " + userMap.get("Last Name"));
+        TestStore.put("Student Name", userMap.get("First Name") + " " + userMap.get("Last Name"));
 
         practiceForm.scrollAndSendKeys(practiceForm.userMail, userMap.get("Mail"));
-        ContextStore.put("Student Email", userMap.get("Mail"));
+        TestStore.put("Student Email", userMap.get("Mail"));
 
         practiceForm.scrollAndSendKeys(practiceForm.mobileNumber, userMap.get("Mobile Number"));
-        ContextStore.put("Mobile", userMap.get("Mobile Number"));
+        TestStore.put("Mobile", userMap.get("Mobile Number"));
     }
 
     @Given("Gender: {}")
     public void submitGender(String gender) {
-        practiceForm.clickElementUntil(practiceForm.getElementFromList(gender, practiceForm.genderButtons));
-        ContextStore.put("Gender", gender);
+        practiceForm.clickElementUntil(true, practiceForm.getElementFromList(gender, practiceForm.genderButtons));
+        TestStore.put("Gender", gender);
     }
 
     @Given("Day: {} Month: {} Year: {}")
     public void datePicker2(String day, String month, String year){
-        practiceForm.clickElementUntil(practiceForm.dateOfBirthInput);
-        practiceForm.clickElementUntil(practiceForm.datePicker.getMonth(month));
-        practiceForm.clickElementUntil(practiceForm.datePicker.getYear(year));
-        practiceForm.clickElementUntil(practiceForm.datePicker.getDay(day));
-        ContextStore.put("Day", day);
-        ContextStore.put("Month", month);
-        ContextStore.put("Year", year);
-        ContextStore.put("Date of Birth", ContextStore.get("Day") + " " + ContextStore.get("Month") + "," + ContextStore.get("Year"));
+        practiceForm.clickElementUntil(true, practiceForm.dateOfBirthInput);
+        practiceForm.clickElementUntil(false, practiceForm.datePicker.getMonth(month));
+        practiceForm.clickElementUntil(false, practiceForm.datePicker.getYear(year));
+        practiceForm.clickElementUntil(false, practiceForm.datePicker.getDay(day));
+        TestStore.put("Day", day);
+        TestStore.put("Month", month);
+        TestStore.put("Year", year);
+        TestStore.put("Date of Birth", TestStore.get("Day") + " " + TestStore.get("Month") + "," + TestStore.get("Year"));
     }
 
     @Given("Subject: {}")
     public void submitSubject(String subject) {
         practiceForm.scrollAndSendKeys(practiceForm.subjectBox, subject);
-        practiceForm.clickElementUntil(practiceForm.subjectSpawnBox);
-        ContextStore.put("Subjects", subject);
+        practiceForm.clickElementUntil(false, practiceForm.subjectSpawnBox);
+        TestStore.put("Subjects", subject);
     }
 
     @Given("Hobby: {}")
     public void submitHobby(String hobby) {
-        practiceForm.clickElementUntil(practiceForm.getElementFromList(hobby, practiceForm.hobbyButtons));
-        ContextStore.put("Hobbies", hobby);
+        practiceForm.clickElementUntil(false, practiceForm.getElementFromList(hobby, practiceForm.hobbyButtons));
+        TestStore.put("Hobbies", hobby);
     }
 
     @Given("Upload picture from: {}")
@@ -72,40 +72,40 @@ public class PracticeFormPageSteps {
         File file = new File(relativePath);
         String absolutePath = fileUtilities.getAbsolutePath(relativePath);
         practiceForm.scrollAndSendKeys(practiceForm.uploadPictureButton, absolutePath);
-        ContextStore.put("Picture", file.getName());
+        TestStore.put("Picture", file.getName());
     }
 
     @Given("Address: {}")
     public void submitAddress(String address) {
         practiceForm.log.new Info("Submitting the address info");
         practiceForm.scrollAndSendKeys(practiceForm.addressBox, address);
-        ContextStore.put("Address", address);
+        TestStore.put("Address", address);
     }
 
     @Given("State: {}")
     public void selectState(String state) {
         practiceForm.log.new Info("Selecting the state");
         practiceForm.scrollAndSendKeys(practiceForm.selectStateBox, state, Keys.ENTER);
-        ContextStore.put("State", state);
+        TestStore.put("State", state);
     }
 
     @Given("City: {}")
     public void selectCity(String city) {
         practiceForm.log.new Info("Selecting the city");
         practiceForm.scrollAndSendKeys(practiceForm.selectCityBox, city, Keys.ENTER);
-        ContextStore.put("City", city);
-        ContextStore.put("State and City", ContextStore.get("State") + " " + ContextStore.get("City"));
+        TestStore.put("City", city);
+        TestStore.put("State and City", TestStore.get("State") + " " + TestStore.get("City"));
     }
 
     @Given("Click Submit button")
     public void submit() {
         practiceForm.log.new Info("Submitting");
-        practiceForm.scrollAndClick(practiceForm.submitButton);
+        practiceForm.clickElementUntil(true, practiceForm.submitButton);
     }
 
     @Given("Verify the submitted value of {} on the submission modal")
     public void verifyTheSubmittedInfo(String labelText) {
-        String expectedValue = ContextStore.get(labelText).toString();
+        String expectedValue = TestStore.get(labelText).toString();
         String actualValue = practiceForm.getSubmissionRow(labelText).getValue();
         Assert.assertEquals("Text of the listed element could not be verified", expectedValue, actualValue);
         practiceForm.log.new Success(labelText + " is verified!");

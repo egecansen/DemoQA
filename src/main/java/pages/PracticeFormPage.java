@@ -2,8 +2,8 @@ package pages;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import pages.component.DatePicker;
-import pages.component.SubmissionRow;
+import pages.components.DatePicker;
+import pages.components.SubmissionRow;
 import utilities.Utils;
 import java.util.List;
 
