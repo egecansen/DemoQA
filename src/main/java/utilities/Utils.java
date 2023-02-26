@@ -56,21 +56,22 @@ public abstract class Utils extends WebComponent {
         element.sendKeys(text);
     }
 
+    @Deprecated
     public void scrollAndClick(WebElement element) {
         log.new Info("Scrolling thru element");
         scroll(element);
-        clickElementUntil(element);
+        //clickElementUntil(element);
     }
 
     public void clickAndDeleteAll(WebElement element) {
-        clickElementUntil(element);
+        clickElementUntil(false, element);
         log.new Info("Deleting text");
         element.sendKeys(Keys.COMMAND + "a", Keys.DELETE);
     }
 
     public void clickAllElements(List<WebElement> elements) {
         for (WebElement element : elements) {
-            clickElementUntil(element);
+            clickElementUntil(false, element);
         }
     }
 
@@ -202,12 +203,15 @@ public abstract class Utils extends WebComponent {
         log.new Info("Waited for " + totalTime + " second(s)");
     }
 
-    public void clickElementUntil(WebElement element) {
+    public void clickElementUntil(Boolean scroll, WebElement element) {
         log.new Info("Clicking the element");
         final long startTime = System.currentTimeMillis();
         boolean isClicked = false;
         int attemptCounter = 0;
         int duration = 30000;
+
+        if (scroll)
+            scroll(element);
         while (System.currentTimeMillis() - startTime < duration) {
             try {
                 element.click();
@@ -220,20 +224,18 @@ public abstract class Utils extends WebComponent {
         if (!isClicked) {
             throw new RuntimeException("Could not click the element after " + attemptCounter + " attempts");
         }
-        //long endTime = System.currentTimeMillis();
-        //long totalTime = endTime - startTime;
-        //log.new Info("Clicked for " + totalTime/1000 + " seconds");
     }
 
     public void moveToElement(WebElement target) {
         Actions actions = new Actions(Driver.driver);
         actions.moveToElement(target).perform();
     }
+
     public void moveToElementAndClick(WebElement element) {
         Actions actions = new Actions(Driver.driver);
         actions.moveToElement(element);
         actions.perform();
-        clickElementUntil(element);
+        clickElementUntil(false, element);
     }
 
     public void verifyImgStatus(WebElement imgElement) {
@@ -326,7 +328,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public void tabSwitcher(int tabNumber) {
-        ContextStore.put("parentHandle", Driver.driver.getWindowHandle());
+        TestStore.put("parentHandle", Driver.driver.getWindowHandle());
         List<String> browserTabs = new ArrayList<>(Driver.driver.getWindowHandles());
         log.new Info(browserTabs.size());
         Driver.driver.switchTo().window(browserTabs.get(tabNumber));
@@ -345,7 +347,7 @@ public abstract class Utils extends WebComponent {
 
     public void windowSwitcher() {
         log.new Info("Changing window focus");
-        ContextStore.put("parentWindow", Driver.driver.getWindowHandle());
+        TestStore.put("parentWindow", Driver.driver.getWindowHandle());
         String currentWindow = Driver.driver.getWindowHandle();
         Set<String> handles = Driver.driver.getWindowHandles();
         for (String handle : handles) {
@@ -360,7 +362,7 @@ public abstract class Utils extends WebComponent {
     public void twoTabSwitcher() {
         log.new Info("Changing window focus");
         new WebDriverWait(Driver.driver, Duration.ofSeconds(5000)).until(ExpectedConditions.numberOfWindowsToBe(2));
-        ContextStore.put("parentWindow", Driver.driver.getWindowHandle());
+        TestStore.put("parentWindow", Driver.driver.getWindowHandle());
         String currentWindow = Driver.driver.getWindowHandle();
         Set<String> handles = Driver.driver.getWindowHandles();
         for (String handle : handles) {
@@ -382,6 +384,7 @@ public abstract class Utils extends WebComponent {
             if (element.getText().equalsIgnoreCase(labelText)) return element;}
         throw new RuntimeException("Element not found!!");
     }
+
     public WebElement getElementFromListUntil(String labelText, List<WebElement> elements) {
         final long startTime = System.currentTimeMillis();
         int duration = 30000;
@@ -451,6 +454,7 @@ public abstract class Utils extends WebComponent {
         }
         return result;
     }
+
     public void saveTextToTextFile(String fileName, String text) {
         log.new Info("Saving text on a text file named: " + fileName);
         File f = new File("src/test/resources/results/" + fileName + ".txt");
@@ -464,11 +468,14 @@ public abstract class Utils extends WebComponent {
             log.new Info("Error!" + e.getMessage());
         }
     }
+
     public void setWindowSize(int width, int height) {
         log.new Info("Changing the window size to " + width + "/" + height);
         Driver.driver.manage().window().setSize(new Dimension(width, height));
     }
+
     public void maximizeWindowSize(){
         Driver.driver.manage().window().maximize();
     }
+
 }

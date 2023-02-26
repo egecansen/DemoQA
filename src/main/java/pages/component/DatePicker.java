@@ -7,6 +7,7 @@ import utilities.Utils;
 import java.util.List;
 
 public class DatePicker extends Utils {
+
     @FindBy(css = ".react-datepicker__year-select option")
     public List<WebElement> years;
 

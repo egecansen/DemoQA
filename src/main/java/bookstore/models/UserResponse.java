@@ -7,6 +7,6 @@ import java.util.List;
 public class UserResponse {
     String userID;
     String username;
-    List<BookListModel.BookModel> books;
+    List<BookModel> books;
 
 }

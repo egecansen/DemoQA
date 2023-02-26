@@ -3,36 +3,40 @@ package bookstore;
 import api_assured.ApiUtilities;
 import api_assured.ServiceGenerator;
 import bookstore.models.*;
-import context.ContextStore;
+import utilities.TestStore;
 import okhttp3.Headers;
 import retrofit2.Call;
-import retrofit2.Response;
 
 public class BookStore extends ApiUtilities {
+
+    BookStoreServices.Authorized bookStoreAuthorized = new ServiceGenerator(
+            new Headers.Builder().add("Authorization", "Bearer " + TestStore.get("token").toString()).build()
+    ).generate(BookStoreServices.Authorized.class);
+
     BookStoreServices bookStore = new ServiceGenerator().generate(BookStoreServices.class);
 
-    public UserResponse createUser(CredentialModel user) {
-        log.new Info("Creating a new user");
-        Call<UserResponse> userCall = bookStore.postUser(user);
+    public PostBookResponse postBooks(CollectionOfIsbnModel books) {
+        log.new Info("Posting the selected books");
+        Call<PostBookResponse> bookCall = bookStoreAuthorized.postBooks(books);
+        return perform(bookCall, true, true);
+    }
+
+    public Isbn postBook(CollectionOfIsbnModel books) {
+        log.new Info("Posting the selected books");
+        Call<Isbn> bookCall = bookStoreAuthorized.postBook(books);
+        return perform(bookCall, true, true);
+    }
+
+    public UserResponse getUser(String Id) {
+        log.new Info("Getting the user by id: " + Id);
+        Call<UserResponse> userCall = bookStoreAuthorized.getUser(Id);
         return perform(userCall, true, true);
     }
 
-    public TokenResponse generateToken(CredentialModel user) {
-        log.new Info("Generating a token for the user named: " + user.getUserName());
-        Call<TokenResponse> tokenCall = bookStore.generateToken(user);
-        return perform(tokenCall, true, true);
-    }
-
-    public Object authorizeUser(CredentialModel user) {
-        log.new Info("Authorizing the user named: " + user.getUserName());
-        Call<Object> userCall = bookStore.authorizeUser(user);
-        return perform(userCall, true, true);
-    }
-
-    public Response<BookListModel> getBooks() {
+    public BookListModel getAllBooks() {
         log.new Info("Getting all books in the bookstore");
         Call<BookListModel> bookCall = bookStore.getBooks();
-        return getResponse(bookCall, true, true);
+        return perform(bookCall, true, true);
     }
 
 }

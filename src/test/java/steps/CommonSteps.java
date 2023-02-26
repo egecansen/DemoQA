@@ -1,11 +1,13 @@
 package steps;
 
-import bookstore.BookStore;
 import bookstore.BookStoreAuthorization;
 import bookstore.models.CredentialModel;
+import bookstore.models.TokenResponse;
+import bookstore.models.UserResponse;
 import driver.Driver;
 import io.cucumber.java.*;
 import io.cucumber.java.en.Given;
+import utilities.TestStore;
 import utilities.Utils;
 
 import java.lang.reflect.Type;
@@ -20,17 +22,26 @@ public class CommonSteps extends Utils {
     public Scenario scenario;
     public boolean authenticate;
     public boolean initialiseBrowser;
-    BookStore bookStore = new BookStore();
+    BookStoreAuthorization bookStoreAuth = new BookStoreAuthorization();
     ObjectMapper objectMapper = new ObjectMapper();
     @Before
     public void before(Scenario scenario) {
         log.new Warning("Running: " + scenario.getName());
         processScenarioTags(scenario);
         if (initialiseBrowser) Driver.setup(getDriverType(scenario));
-        if (scenario.getSourceTagNames().contains("@Authorise")) {
+        if (scenario.getSourceTagNames().contains("@Authenticate")) {
             CredentialModel user = new CredentialModel("Tillerman");
             user.setPassword("Tillerman1*");
-            bookStore.createUser(user);
+
+            UserResponse userResponse = BookStoreAuthorization.createUser(user);
+            TestStore.put("contextUser", user);
+            TestStore.put("userId", userResponse.getUserID());
+
+            TestStore.put("userName", userResponse.getUsername());
+            TestStore.put("password", user.getPassword());
+
+            TokenResponse tokenResponse = BookStoreAuthorization.generateToken(user);
+            TestStore.put("token", tokenResponse.getToken());
         }
     }
 
@@ -51,18 +62,11 @@ public class CommonSteps extends Utils {
 
     @After
     public void after(Scenario scenario) {
-        if (authenticate)
-            try {
-                Driver.driver = null;
-            }
-            catch (NullPointerException e){
-                log.new Info("@Authenticate - (Driver is not initialized.)");
-                }
-        else Driver.quitDriver();
-        if (!initialiseBrowser){
-            if (scenario.isFailed()) throw new RuntimeException(scenario.getName() + ": FAILED!");
-            else log.new Success(scenario.getName() + ": PASS!");
+        if (initialiseBrowser) {
+            Driver.quitDriver();
         }
+        if (scenario.isFailed()) throw new RuntimeException(scenario.getName() + ": FAILED!");
+        else log.new Success(scenario.getName() + ": PASS!");
     }
 
     public Driver.DriverType getDriverType(Scenario scenario) {
