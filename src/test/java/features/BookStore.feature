@@ -1,22 +1,15 @@
 Feature: BookStore
 
-  @Authenticate
-  Scenario: Create a user and post books
-    * Assign all books from bookstore published by No Starch Press to user in context
-    * Get user in context
-    * Post selected books for user in context
-      | isbn          |
-      | 9781449325862 |
-      | 9781449331818 |
-      | 9781449337711 |
-    * Get user in context
+  @Authenticate @Web-UI
+  Scenario: Bookstore post book test
 
+  This test creates a user using book stores back end, then adds selected books to user in context
+  Verifies the books exists on book store application front end for the user in context
 
-  @Web-UI
-  Scenario: Verify user
+    * Assign all books published by No Starch Press from bookstore to user in context
+    * Get user in context
     * Navigate to https://demoqa.com/
     * Select the card named Book Store Application on the landing page
     * Select Login from the selected card menu
     * Submit with the user in context
-    * Wait 3 seconds
-
+    * Verify book details for the books of user in context

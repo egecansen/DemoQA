@@ -5,6 +5,7 @@ import org.openqa.selenium.support.FindBy;
 import utilities.Utils;
 
 public class BookStoreLoginPage extends Utils {
+
     @FindBy(id = "userName")
     public WebElement userNameBox;
 
@@ -14,6 +15,4 @@ public class BookStoreLoginPage extends Utils {
     @FindBy(id = "login")
     public WebElement loginButton;
 
-    @FindBy(css = ".mr-2 a")
-    public WebElement listedbBook;
 }

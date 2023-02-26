@@ -37,7 +37,7 @@ public class BookStoreAPISteps {
         getUser(TestStore.get("userId").toString());
     }
 
-    @Given("Assign all books from bookstore published by {} to user in context")
+    @Given("Assign all books published by {} from bookstore to user in context")
     public void assignBooksByPublisher(String publisher) {
         List<Isbn> books = new ArrayList<>();
 

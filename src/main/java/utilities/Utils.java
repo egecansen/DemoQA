@@ -46,19 +46,19 @@ public abstract class Utils extends WebComponent {
     }
 
     public void scroll(WebElement element) {
-        log.new Info("Scrolling thru element");
+        log.new Info("Scrolling toward element");
         ((JavascriptExecutor) Driver.driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
     public void scrollAndSendKeys(WebElement element, CharSequence... text) {
-        scrollThruCenter(element);
+        scrollTowardCenter(element);
         log.new Info("Submitting the given info");
         element.sendKeys(text);
     }
 
     @Deprecated
     public void scrollAndClick(WebElement element) {
-        log.new Info("Scrolling thru element");
+        log.new Info("Scrolling toward element");
         scroll(element);
         //clickElementUntil(element);
     }
@@ -141,8 +141,8 @@ public abstract class Utils extends WebComponent {
         waitFor(0.3);
     }
 
-    public void scrollThruCenter(WebElement element) {
-        log.new Info("Scrolling thru elements center");
+    public void scrollTowardCenter(WebElement element) {
+        log.new Info("Scrolling toward elements center");
         String scrollElementIntoMiddle = "var viewPortHeight = " +
                 "Math.max(document.documentElement.clientHeight, window.innerHeight || 0);"
                 + "var elementTop = arguments[0].getBoundingClientRect().top;"
