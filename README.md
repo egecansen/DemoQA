@@ -12,7 +12,7 @@ This project is capable of both WebUI and API tests. Different kind of tests can
     mvn clean test
     ```
 
-- To run a specific scenario use the specified scenario tags:
+- To run a specific scenario use the special scenario tags:
     ```yml
     mvn clean test -q -Dcucumber.filter.tags="@SCN-DemoQA-1"
     ```
