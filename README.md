@@ -16,6 +16,6 @@ This project is capable of both WebUI and API tests. Different kind of tests can
     ```yml
     mvn clean test -q -Dcucumber.filter.tags="@SCN-DemoQA-1"
     ```
-- To select a driver type, add a driver tag in scenarios. Deafult driver type is Chrome.
+- Deafult driver type is Chrome. To select a driver type, add a driver tag in scenarios.
 
 - Tests can be run headless by modifying the headless property in _test.properties_.
