@@ -3,6 +3,7 @@ package utilities;
 import com.github.webdriverextensions.WebComponent;
 import com.github.webdriverextensions.WebDriverExtensionFieldDecorator;
 import driver.Driver;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
@@ -25,7 +26,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import static resources.Colors.*;
 
@@ -46,7 +46,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public void scroll(WebElement element) {
-        log.new Info("Scrolling toward element");
+        log.new Info("Scrolling to the element");
         ((JavascriptExecutor) Driver.driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
@@ -150,17 +150,10 @@ public abstract class Utils extends WebComponent {
         ((JavascriptExecutor) Driver.driver).executeScript(scrollElementIntoMiddle, element);
     }
 
-    public void waitFor(int duration) {
-        try {
-            TimeUnit.SECONDS.sleep(duration);
-            log.new Info("Waited for '" + duration + "' seconds");
-        } catch (InterruptedException ignored) {
-        }
-    }
-
     public void waitUntilDisplayed(WebElement element) {
-        FluentWait<WebDriver> fluentWait = new FluentWait<>((WebDriver) Driver.driver)
-                .withTimeout(Duration.ofSeconds(30))
+        FluentWait<WebDriver> fluentWait = new FluentWait<>(Driver.driver);
+
+        fluentWait.withTimeout(Duration.ofSeconds(30))
                 .pollingEvery(Duration.ofSeconds(3))
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
 
@@ -174,8 +167,9 @@ public abstract class Utils extends WebComponent {
     }
 
     public void waitUntilListToBeDisplayed(List<WebElement> elements) {
-        FluentWait<WebDriver> fluentWait = new FluentWait<>((WebDriver) Driver.driver)
-                .withTimeout(Duration.ofSeconds(30))
+        FluentWait<WebDriver> fluentWait = new FluentWait<>(Driver.driver);
+
+        fluentWait.withTimeout(Duration.ofSeconds(30))
                 .pollingEvery(Duration.ofSeconds(5))
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
 
@@ -188,11 +182,12 @@ public abstract class Utils extends WebComponent {
     }
 
     public void waitUntilStable(WebElement element) {
+        FluentWait<WebDriver> fluentWait = new FluentWait<>(Driver.driver);
+
         log.new Info("Waiting " + element.getText() + " to be stable");
         final long startTime = System.currentTimeMillis();
 
-        FluentWait<WebDriver> fluentWait = new FluentWait<>((WebDriver) Driver.driver)
-                .withTimeout(Duration.ofSeconds(30))
+        fluentWait.withTimeout(Duration.ofSeconds(30))
                 .pollingEvery(Duration.ofSeconds(3))
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
 
@@ -203,8 +198,60 @@ public abstract class Utils extends WebComponent {
         log.new Info("Waited for " + totalTime + " second(s)");
     }
 
+    public void waitAndClickReCaptcha() {
+        WebDriverWait wait = new WebDriverWait(Driver.driver, Duration.ofSeconds(20));
+
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(
+                By.xpath("//iframe[starts-with(@name, 'a-') " +
+                        "and starts-with(@src, 'https://www.google.com/recaptcha')]")));
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.recaptcha-checkbox-border"))).click();
+    }
+
+    public void addCookies(Cookie... cookies){
+        log.new Info("Adding specified cookies");
+        for (Cookie cookie: cookies)
+            Driver.driver.manage().addCookie(cookie);
+    }
+
+    public File getLastModified(String directoryFilePath) {
+        File directory = new File(directoryFilePath);
+        File[] files = directory.listFiles(File::isFile);
+        long lastModifiedTime = Long.MIN_VALUE;
+        File chosenFile = null;
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.lastModified() > lastModifiedTime) {
+                    chosenFile = file;
+                    lastModifiedTime = file.lastModified();
+                }
+            }
+        }
+        return chosenFile;
+    }
+
+    public void waitUntilDownloaded(String directory, String fileName) {
+        long initialTime = System.currentTimeMillis();
+        boolean timeOut;
+        log.new Info("Waiting the files existence");
+
+            do {
+                timeOut = System.currentTimeMillis() - initialTime > 300000;
+                waitFor(3);
+            }
+            while(!timeOut && !FileUtils.listFiles(new File(directory), new String[]{fileName}, false).isEmpty());
+            if (timeOut) log.new Warning("Download time out!");
+    }
+
+    public void cleanDirectory(String directoryFilePath) {
+        log.new Info("Deleting all items from the given directory");
+        try {
+            FileUtils.cleanDirectory(new File(directoryFilePath));
+        }
+        catch (IOException e) {e.getMessage();}
+    }
+
     public void clickElementUntil(Boolean scroll, WebElement element) {
-        log.new Info("Clicking the element");
         final long startTime = System.currentTimeMillis();
         boolean isClicked = false;
         int attemptCounter = 0;
@@ -212,6 +259,7 @@ public abstract class Utils extends WebComponent {
 
         if (scroll)
             scroll(element);
+        log.new Info("Clicking the element named: " + element.getText());
         while (System.currentTimeMillis() - startTime < duration) {
             try {
                 element.click();
@@ -245,7 +293,6 @@ public abstract class Utils extends WebComponent {
             CloseableHttpClient client = customizedClientBuilder.build();
             HttpGet request = new HttpGet(imgElement.getAttribute("src"));
             HttpResponse response = client.execute(request);
-            // print image link and response
             String imgLink = imgElement.getAttribute("src");
             log.new Info("Image Link: " + imgLink);
             log.new Info("Status: " + response.getStatusLine());
@@ -412,7 +459,6 @@ public abstract class Utils extends WebComponent {
     public void saveLinksToTextFile(String fileName, List<WebElement> elements) {
         log.new Info("Saving links to a text file named: " + fileName);
         File f = new File(fileName + ".txt");
-        String linkTexts;
         if (f.exists()) f.delete();
         try {
             FileWriter fw = new FileWriter(f, true);
@@ -430,7 +476,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public List<String> readLinksOnBrowser(List<WebElement> elements) {
-        List<String> linkList = new ArrayList<String>();
+        List<String> linkList = new ArrayList<>();
         for (WebElement element : elements){
             log.new Info(element.getAttribute("href"));
             linkList.add(element.getAttribute("href"));

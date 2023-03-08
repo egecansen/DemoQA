@@ -23,19 +23,6 @@ public class PracticeFormPage extends Utils {
 
     @FindBy (css = "[for*='gender-radio']")
     public List<WebElement> genderButtons;
-
-    @FindBy (id = "dateOfBirthInput")
-    public WebElement dateOfBirth;
-
-    @FindBy (css = "[class='react-datepicker__month-select'] option")
-    public List<WebElement> months;
-
-    @FindBy (css = "[class='react-datepicker__year-select'] option")
-    public List<WebElement> years;
-
-    @FindBy (css = ".react-datepicker__month [role='option']")
-    public List<WebElement> days;
-
     @FindBy (id = "subjectsInput")
     public WebElement subjectBox;
 
@@ -76,4 +63,5 @@ public class PracticeFormPage extends Utils {
         }
         throw new RuntimeException("Row not found!!");
     }
+
 }

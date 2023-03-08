@@ -22,14 +22,14 @@ public class CommonSteps extends Utils {
     public Scenario scenario;
     public boolean authenticate;
     public boolean initialiseBrowser;
-    BookStoreAuthorization bookStoreAuth = new BookStoreAuthorization();
     ObjectMapper objectMapper = new ObjectMapper();
+
     @Before
     public void before(Scenario scenario) {
         log.new Warning("Running: " + scenario.getName());
         processScenarioTags(scenario);
         if (initialiseBrowser) Driver.setup(getDriverType(scenario));
-        if (scenario.getSourceTagNames().contains("@Authenticate")) {
+        if (authenticate) {
             CredentialModel user = new CredentialModel("Tillerman");
             user.setPassword("Tillerman1*");
 
@@ -89,4 +89,5 @@ public class CommonSteps extends Utils {
         try {TimeUnit.SECONDS.sleep(duration);}
         catch (InterruptedException ignored){}
     }
+
 }

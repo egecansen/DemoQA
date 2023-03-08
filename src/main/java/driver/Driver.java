@@ -6,9 +6,12 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class Driver {
@@ -25,11 +28,18 @@ public class Driver {
         catch (IOException notFoundException) {throw new RuntimeException("The Properties not exist!");}
 
         boolean headless = Boolean.parseBoolean(properties.getProperty("headless","false"));
+        String downloadsDirectoryPath = new File("src/test/resources/downloads").getAbsolutePath();
+        String downloadsDirectory = properties.getProperty("downloads", downloadsDirectoryPath);
 
             switch (driverType) {
                 case chrome:
                     ChromeOptions options = new ChromeOptions();
                     options.setHeadless(headless);
+
+                    Map<String, Object> prefs = new HashMap<>();
+                    prefs.put("download.default_directory", downloadsDirectory);
+                    options.setExperimentalOption("prefs", prefs);
+
                     driver = new ChromeDriver(options);
                     break;
                 case firefox:

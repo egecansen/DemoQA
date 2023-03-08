@@ -34,6 +34,7 @@ public class SliderSteps {
         int finalValue = Integer.parseInt(slider.getAttribute("value"));
         Assert.assertEquals("Slider value is incorrect!", value, finalValue);
         sliderPage.log.new Success("Final value is verified to be: " + finalValue);
+
     }
 
 }
