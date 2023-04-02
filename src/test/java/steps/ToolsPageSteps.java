@@ -9,7 +9,7 @@ public class ToolsPageSteps {
 
     @Given("Select {} section from the selected card menu")
     public void clickItem(String toolText) {
-        toolsPage.clickElementUntil(true, toolsPage.getElementFromList(toolText, toolsPage.tools));
+        toolsPage.clickElementUntil(toolsPage.getElementFromList(toolText, toolsPage.tools), true);
     }
 
 }

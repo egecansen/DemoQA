@@ -7,13 +7,19 @@ import bookstore.models.UserResponse;
 import driver.Driver;
 import io.cucumber.java.*;
 import io.cucumber.java.en.Given;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import utilities.TestStore;
 import utilities.Utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import static driver.Driver.DriverType.chrome;
 
 
@@ -45,6 +51,19 @@ public class CommonSteps extends Utils {
         }
     }
 
+    @After
+    public void after(Scenario scenario) {
+        if (initialiseBrowser && scenario.isFailed()) {
+            captureScreen();
+            Driver.quitDriver();
+            log.new Error(scenario.getName() + ": FAILED!", null);
+        }
+        if (initialiseBrowser && !scenario.isFailed()) {
+            Driver.quitDriver();
+            log.new Success(scenario.getName() + ": PASS!");
+        }
+    }
+
     public void processScenarioTags(Scenario scenario){
         log.new Important(scenario.getSourceTagNames());
         this.scenario = scenario;
@@ -60,13 +79,15 @@ public class CommonSteps extends Utils {
         return objectMapper.convertValue(fromValue, objectMapper.constructType(toValueType));
     }
 
-    @After
-    public void after(Scenario scenario) {
-        if (initialiseBrowser) {
-            Driver.quitDriver();
+    public void captureScreen() {
+        log.new Info("Capturing screen");
+        File src=((TakesScreenshot)Driver.driver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(src, new File("src/test/resources/files/screenshots" + File.separator + "screenshot-" + scenario.getName() + ".png"));
         }
-        if (scenario.isFailed()) throw new RuntimeException(scenario.getName() + ": FAILED!");
-        else log.new Success(scenario.getName() + ": PASS!");
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public Driver.DriverType getDriverType(Scenario scenario) {
@@ -79,6 +100,12 @@ public class CommonSteps extends Utils {
 
     @Given("Navigate to {}")
     public void navigate(String url) {
+        log.new Info("Navigating to '" + url + "'");
+        Driver.driver.get(url);
+    }
+    @Given("Adjust window size to {}, {} and navigate to {}")
+    public void navigateWithWindowSize(int width, int height, String url) {
+        setWindowSize(width, height);
         log.new Info("Navigating to '" + url + "'");
         Driver.driver.get(url);
     }

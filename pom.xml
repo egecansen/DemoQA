@@ -16,7 +16,7 @@
     <browser>Chrome</browser>
     <name>${project.name}</name>
     <cucumber.version>7.10.1</cucumber.version>
-    <selenium.version>4.7.1</selenium.version>
+    <selenium.version>4.8.2</selenium.version>
   </properties>
 
   <dependencies>

@@ -1,10 +1,9 @@
 Feature: DemoQA
   @Web-UI @Chrome @SCN-DemoQA-1
-  Scenario: Submit form test
-    * Navigate to https://demoqa.com/
+  Scenario: Submit Form Test
+    * Adjust window size to 480, 5000 and navigate to https://demoqa.com/
     * Select the card named Forms on the landing page
     * Select Practice Form section from the selected card menu
-    * Set window size to 720, 8000
     * Submit the user info by following:
       | First Name    | Egecan                 |
       | Last Name     | Sen                    |
@@ -14,7 +13,7 @@ Feature: DemoQA
     * Day: 04 Month: July Year: 1995
     * Subject: Arts
     * Hobby: Sports
-    * Upload picture from: src/test/resources/pictures/di444.JPG
+    * Upload picture from: src/test/resources/files/pictures/di444.JPG
     * Address: Lale street, Leyla apartment, No: 7
     * State: Haryana
     * City: Panipat
@@ -39,11 +38,8 @@ Feature: DemoQA
     * Slide the slider to 44
 
   @Web-UI @Chrome @SCN-DemoQA-3
-  Scenario: Download and upload interaction
-
-    Projects download directory default on Chrome only.
-    Directory can be adjust on test properties by using "downloads" property.
-
+  Scenario: Download and Upload interaction
+    Project downloads directory adjusted for chrome only.
     * Navigate to https://demoqa.com/
     * Select the card named Elements on the landing page
     * Select Upload and Download section from the selected card menu

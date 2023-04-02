@@ -13,7 +13,7 @@ public class BookStoreLoginPageSteps {
         loginPage.log.new Info("Submitting...");
         loginPage.userNameBox.sendKeys(TestStore.get("userName").toString());
         loginPage.passwordBox.sendKeys(TestStore.get("password").toString());
-        loginPage.clickElementUntil(false, loginPage.loginButton);
+        loginPage.clickElementUntil(loginPage.loginButton);
     }
 
 }

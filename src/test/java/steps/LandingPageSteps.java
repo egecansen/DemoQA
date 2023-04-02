@@ -9,7 +9,7 @@ public class LandingPageSteps {
 
     @Given("Select the card named {} on the landing page")
     public void clickCard(String labelText) {
-        landingPage.clickElementUntil(true, landingPage.getElementFromList(labelText, landingPage.categories));
+        landingPage.clickElementUntil(landingPage.getElementFromList(labelText, landingPage.categories), true);
     }
 
 }

@@ -4,6 +4,7 @@ package steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.datatable.DataTable;
 import org.junit.Assert;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.Keys;
 import pages.PracticeFormPage;
 import utilities.TestStore;
@@ -37,16 +38,16 @@ public class PracticeFormPageSteps {
 
     @Given("Gender: {}")
     public void submitGender(String gender) {
-        practiceForm.clickElementUntil(true, practiceForm.getElementFromList(gender, practiceForm.genderButtons));
+        practiceForm.clickElementUntil(practiceForm.getElementFromList(gender, practiceForm.genderButtons), true);
         TestStore.put("Gender", gender);
     }
 
     @Given("Day: {} Month: {} Year: {}")
     public void datePicker2(String day, String month, String year){
-        practiceForm.clickElementUntil(true, practiceForm.dateOfBirthInput);
-        practiceForm.clickElementUntil(false, practiceForm.datePicker.getMonth(month));
-        practiceForm.clickElementUntil(false, practiceForm.datePicker.getYear(year));
-        practiceForm.clickElementUntil(false, practiceForm.datePicker.getDay(day));
+        practiceForm.clickElementUntil(practiceForm.dateOfBirthInput, true);
+        practiceForm.clickElementUntil(practiceForm.datePicker.getMonth(month));
+        practiceForm.clickElementUntil(practiceForm.datePicker.getYear(year));
+        practiceForm.clickElementUntil(practiceForm.datePicker.getDay(day));
         TestStore.put("Day", day);
         TestStore.put("Month", month);
         TestStore.put("Year", year);
@@ -56,13 +57,13 @@ public class PracticeFormPageSteps {
     @Given("Subject: {}")
     public void submitSubject(String subject) {
         practiceForm.scrollAndSendKeys(practiceForm.subjectBox, subject);
-        practiceForm.clickElementUntil(false, practiceForm.subjectSpawnBox);
+        practiceForm.clickElementUntil(practiceForm.subjectSpawnBox);
         TestStore.put("Subjects", subject);
     }
 
     @Given("Hobby: {}")
     public void submitHobby(String hobby) {
-        practiceForm.clickElementUntil(false, practiceForm.getElementFromList(hobby, practiceForm.hobbyButtons));
+        practiceForm.clickElementUntil(practiceForm.getElementFromList(hobby, practiceForm.hobbyButtons));
         TestStore.put("Hobbies", hobby);
     }
 
@@ -100,7 +101,7 @@ public class PracticeFormPageSteps {
     @Given("Click Submit button")
     public void submit() {
         practiceForm.log.new Info("Submitting");
-        practiceForm.clickElementUntil(true, practiceForm.submitButton);
+        practiceForm.clickElementUntil(practiceForm.submitButton, true);
     }
 
     @Given("Verify the submitted value of {} on the submission modal")

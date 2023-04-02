@@ -46,7 +46,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public void scroll(WebElement element) {
-        log.new Info("Scrolling to the element");
+        log.new Info("Scrolling to element");
         ((JavascriptExecutor) Driver.driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
@@ -64,14 +64,14 @@ public abstract class Utils extends WebComponent {
     }
 
     public void clickAndDeleteAll(WebElement element) {
-        clickElementUntil(false, element);
+        clickElementUntil( element);
         log.new Info("Deleting text");
         element.sendKeys(Keys.COMMAND + "a", Keys.DELETE);
     }
 
     public void clickAllElements(List<WebElement> elements) {
         for (WebElement element : elements) {
-            clickElementUntil(false, element);
+            clickElementUntil(element);
         }
     }
 
@@ -251,7 +251,7 @@ public abstract class Utils extends WebComponent {
         catch (IOException e) {e.getMessage();}
     }
 
-    public void clickElementUntil(Boolean scroll, WebElement element) {
+    public void clickElementUntil(WebElement element, Boolean scroll) {
         final long startTime = System.currentTimeMillis();
         boolean isClicked = false;
         int attemptCounter = 0;
@@ -259,6 +259,27 @@ public abstract class Utils extends WebComponent {
 
         if (scroll)
             scroll(element);
+        log.new Info("Clicking the element named: " + element.getText());
+        while (System.currentTimeMillis() - startTime < duration) {
+            try {
+                element.click();
+                isClicked = true;
+                break;
+            } catch (WebDriverException e) {
+                attemptCounter++;
+            }
+        }
+        if (!isClicked) {
+            throw new RuntimeException("Could not click the element after " + attemptCounter + " attempts");
+        }
+    }
+
+    public void clickElementUntil(WebElement element) {
+        final long startTime = System.currentTimeMillis();
+        boolean isClicked = false;
+        int attemptCounter = 0;
+        int duration = 30000;
+
         log.new Info("Clicking the element named: " + element.getText());
         while (System.currentTimeMillis() - startTime < duration) {
             try {
@@ -283,7 +304,7 @@ public abstract class Utils extends WebComponent {
         Actions actions = new Actions(Driver.driver);
         actions.moveToElement(element);
         actions.perform();
-        clickElementUntil(false, element);
+        clickElementUntil(element);
     }
 
     public void verifyImgStatus(WebElement imgElement) {

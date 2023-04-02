@@ -63,7 +63,7 @@ public class BookStoreProfilePageSteps {
             Assert.assertEquals("Websites not match", expectedWebsite, actualWebsite);
             bookStoreProfilePage.log.new Success("Websites matches for book named: " +BLUE+book.getTitle());
 
-            bookStoreProfilePage.clickElementUntil(true, bookStoreProfilePage.backToBookStoreButton);
+            bookStoreProfilePage.clickElementUntil(bookStoreProfilePage.backToBookStoreButton, true);
         }
     }
 

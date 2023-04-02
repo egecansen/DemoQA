@@ -18,7 +18,7 @@ public class BookRow extends Utils {
         return cells.get(titleIndex).getText();
     }
     public void selectRow() {
-        clickElementUntil(false, cells.get(titleIndex).innerContent);
+        clickElementUntil(cells.get(titleIndex).innerContent);
     }
 
     public static class Cell extends Utils {

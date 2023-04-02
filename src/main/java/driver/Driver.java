@@ -4,6 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
 
 import java.io.File;
@@ -28,15 +29,16 @@ public class Driver {
         catch (IOException notFoundException) {throw new RuntimeException("The Properties not exist!");}
 
         boolean headless = Boolean.parseBoolean(properties.getProperty("headless","false"));
-        String downloadsDirectoryPath = new File("src/test/resources/downloads").getAbsolutePath();
-        String downloadsDirectory = properties.getProperty("downloads", downloadsDirectoryPath);
+
+        String downloadsDirectoryPath = new File("src/test/resources/files/downloads").getAbsolutePath();
+        String downloadsDirectory = properties.getProperty("downloadsPath", downloadsDirectoryPath);
 
             switch (driverType) {
                 case chrome:
                     ChromeOptions options = new ChromeOptions();
-                    options.setHeadless(headless);
-
                     Map<String, Object> prefs = new HashMap<>();
+                    if (headless)
+                        options.addArguments("--headless=new");
                     prefs.put("download.default_directory", downloadsDirectory);
                     options.setExperimentalOption("prefs", prefs);
 
