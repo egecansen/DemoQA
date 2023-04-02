@@ -3,7 +3,7 @@ In this project, i created a UI automation framework, using _**Selenium & Cucumb
 
 This project is capable of both WebUI and API tests. Different kind of tests can be enabled by usage of scenario tags. Scenarios with `@Web-UI` tag will have a browser initialized while scenarios with `@Authenticate` tag will generate authentication tokens for backend tests.
 
-## Run on terminal
+## Run
 
 - Go to project directory in terminal
 
