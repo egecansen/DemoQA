@@ -101,7 +101,7 @@ public class PracticeFormPageSteps {
     @Given("Click Submit button")
     public void submit() {
         practiceForm.log.new Info("Submitting");
-        practiceForm.clickElementUntil(practiceForm.submitButton, true);
+        practiceForm.clickWithJS(practiceForm.submitButton);
     }
 
     @Given("Verify the submitted value of {} on the submission modal")

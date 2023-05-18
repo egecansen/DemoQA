@@ -98,6 +98,7 @@ public abstract class Utils extends WebComponent {
         return element;
     }
 
+
     public void dragDropToAction(WebElement element, WebElement destinationElement){
 
         centerElement(element);
@@ -249,6 +250,11 @@ public abstract class Utils extends WebComponent {
             FileUtils.cleanDirectory(new File(directoryFilePath));
         }
         catch (IOException e) {e.getMessage();}
+    }
+
+    public void clickWithJS(WebElement element) {
+        JavascriptExecutor executor = (JavascriptExecutor)Driver.driver;
+        executor.executeScript("arguments[0].click();", element);
     }
 
     public void clickElementUntil(WebElement element, Boolean scroll) {

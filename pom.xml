@@ -162,5 +162,6 @@
               </configuration>
           </plugin>
       </plugins>
+    <finalName>demoqa-test</finalName>
   </build>
 </project>
