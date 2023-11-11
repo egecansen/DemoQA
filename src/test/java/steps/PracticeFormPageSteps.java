@@ -78,29 +78,29 @@ public class PracticeFormPageSteps {
 
     @Given("Address: {}")
     public void submitAddress(String address) {
-        practiceForm.log.new Info("Submitting the address info");
+        practiceForm.log.info("Submitting the address info");
         practiceForm.scrollAndSendKeys(practiceForm.addressBox, address);
         TestStore.put("Address", address);
     }
 
     @Given("State: {}")
     public void selectState(String state) {
-        practiceForm.log.new Info("Selecting the state");
+        practiceForm.log.info("Selecting the state");
         practiceForm.scrollAndSendKeys(practiceForm.selectStateBox, state, Keys.ENTER);
         TestStore.put("State", state);
     }
 
     @Given("City: {}")
     public void selectCity(String city) {
-        practiceForm.log.new Info("Selecting the city");
+        practiceForm.log.info("Selecting the city");
         practiceForm.scrollAndSendKeys(practiceForm.selectCityBox, city, Keys.ENTER);
         TestStore.put("City", city);
         TestStore.put("State and City", TestStore.get("State") + " " + TestStore.get("City"));
     }
 
-    @Given("Click Submit button")
+    @Given("Click the submit button")
     public void submit() {
-        practiceForm.log.new Info("Submitting");
+        practiceForm.log.info("Submitting");
         practiceForm.clickWithJS(practiceForm.submitButton);
     }
 
@@ -109,7 +109,7 @@ public class PracticeFormPageSteps {
         String expectedValue = TestStore.get(labelText).toString();
         String actualValue = practiceForm.getSubmissionRow(labelText).getValue();
         Assert.assertEquals("Text of the listed element could not be verified", expectedValue, actualValue);
-        practiceForm.log.new Success(labelText + " is verified!");
+        practiceForm.log.success(labelText + " is verified!");
     }
 
 }

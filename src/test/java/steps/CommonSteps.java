@@ -19,8 +19,9 @@ import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import utils.PropertyUtility;
 
-import static driver.Driver.DriverType.chrome;
+import static driver.Driver.BrowserType.chrome;
 
 
 public class CommonSteps extends Utils {
@@ -34,7 +35,7 @@ public class CommonSteps extends Utils {
     public void before(Scenario scenario) {
         log.new Warning("Running: " + scenario.getName());
         processScenarioTags(scenario);
-        if (initialiseBrowser) Driver.setup(getDriverType(scenario));
+        if (initialiseBrowser) Driver.setup(getBrowserType(scenario));
         if (authenticate) {
             CredentialModel user = new CredentialModel("Tillerman");
             user.setPassword("Tillerman1*");
@@ -65,7 +66,7 @@ public class CommonSteps extends Utils {
     }
 
     public void processScenarioTags(Scenario scenario){
-        log.new Important(scenario.getSourceTagNames());
+        log.new Important(String.valueOf(scenario.getSourceTagNames()));
         this.scenario = scenario;
         authenticate = scenario.getSourceTagNames().contains("@Authenticate");
         initialiseBrowser = scenario.getSourceTagNames().contains("@Web-UI");
@@ -80,7 +81,7 @@ public class CommonSteps extends Utils {
     }
 
     public void captureScreen() {
-        log.new Info("Capturing screen");
+        log.info("Capturing screen");
         File src=((TakesScreenshot)Driver.driver).getScreenshotAs(OutputType.FILE);
         try {
             FileUtils.copyFile(src, new File("src/test/resources/files/screenshots" + File.separator + "screenshot-" + scenario.getName() + ".png"));
@@ -90,29 +91,29 @@ public class CommonSteps extends Utils {
         }
     }
 
-    public Driver.DriverType getDriverType(Scenario scenario) {
-        for (Driver.DriverType driverType: Driver.DriverType.values()) {
-            if (scenario.getSourceTagNames().stream().anyMatch(tag -> tag.replaceAll("@", "").equalsIgnoreCase(driverType.name())))
-                return driverType;
+    public Driver.BrowserType getBrowserType(Scenario scenario) {
+        for (Driver.BrowserType browserType : Driver.BrowserType.values()) {
+            if (scenario.getSourceTagNames().stream().anyMatch(tag -> tag.replaceAll("@", "").equalsIgnoreCase(browserType.name())))
+                return browserType;
         }
         return chrome;
     }
 
     @Given("Navigate to {}")
     public void navigate(String url) {
-        log.new Info("Navigating to '" + url + "'");
+        log.info("Navigating to '" + url + "'");
         Driver.driver.get(url);
     }
     @Given("Adjust window size to {}, {} and navigate to {}")
     public void navigateWithWindowSize(int width, int height, String url) {
+        log.info("Navigating to '" + url + "'");
         setWindowSize(width, height);
-        log.new Info("Navigating to '" + url + "'");
         Driver.driver.get(url);
     }
 
     @Given("Wait {} seconds")
     public void wait(int duration) {
-        log.new Info("Waiting for " + duration + " seconds");
+        log.info("Waiting for " + duration + " seconds");
         try {TimeUnit.SECONDS.sleep(duration);}
         catch (InterruptedException ignored){}
     }
