@@ -15,8 +15,9 @@
     <java.version>17</java.version>
     <browser>Chrome</browser>
     <name>${project.name}</name>
-    <cucumber.version>7.10.1</cucumber.version>
-    <selenium.version>4.8.2</selenium.version>
+    <cucumber.version>7.14.0</cucumber.version>
+    <selenium.version>4.15.0</selenium.version>
+    <Utilities.version>1.5.6</Utilities.version>
   </properties>
 
   <dependencies>
@@ -71,7 +72,7 @@
     <dependency>
       <groupId>io.github.umutayb</groupId>
       <artifactId>Utilities</artifactId>
-      <version>1.2.6</version>
+      <version>${Utilities.version}</version>
     </dependency>
 
     <!-- Web Driver Extensions -->

@@ -1,9 +1,9 @@
 Feature: DemoQA
   @Web-UI @Chrome @SCN-DemoQA-1
   Scenario: Submit Form Test
-    * Adjust window size to 480, 5000 and navigate to https://demoqa.com/
-    * Select the card named Forms on the landing page
-    * Select Practice Form section from the selected card menu
+    * Navigate to https://demoqa.com/
+    * Select the Forms card on the landing page
+    * Select Practice Form tab from the selected card menu
     * Submit the user info by following:
       | First Name    | Egecan                 |
       | Last Name     | Sen                    |
@@ -17,7 +17,7 @@ Feature: DemoQA
     * Address: Lale street, Leyla apartment, No: 7
     * State: Haryana
     * City: Panipat
-    * Click Submit button
+    * Click the submit button
     * Verify the submitted value of Student Name on the submission modal
     * Verify the submitted value of Student Email on the submission modal
     * Verify the submitted value of Gender on the submission modal
@@ -32,8 +32,8 @@ Feature: DemoQA
   @Web-UI @SCN-DemoQA-2
   Scenario: Slider interaction
     * Navigate to https://demoqa.com/
-    * Select the card named Widgets on the landing page
-    * Select Slider section from the selected card menu
+    * Select the Widgets card on the landing page
+    * Select Slider tab from the selected card menu
     * Set window size to 10000, 10000
     * Slide the slider to 44
 
@@ -41,8 +41,7 @@ Feature: DemoQA
   Scenario: Download and Upload interaction
     Project downloads directory adjusted for chrome only.
     * Navigate to https://demoqa.com/
-    * Select the card named Elements on the landing page
-    * Select Upload and Download section from the selected card menu
+    * Select the Elements card on the landing page
+    * Select Upload and Download tab from the selected card menu
     * Click on download button from the selected section
     * Upload the downloaded file from downloads folder and clear directory
-    * Wait 3 seconds

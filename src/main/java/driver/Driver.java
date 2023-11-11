@@ -1,5 +1,6 @@
 package driver;
 
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,23 +18,26 @@ import java.util.Properties;
 
 public class Driver {
 
-    public enum DriverType {
+    public enum BrowserType {
         chrome, safari, firefox
     }
 
     public static WebDriver driver;
 
-    public static void setup(DriverType driverType) {
+    public static void setup(BrowserType browserType) {
         Properties properties = new Properties();
         try {properties.load(new FileReader("src/test/resources/test.properties"));}
         catch (IOException notFoundException) {throw new RuntimeException("The Properties not exist!");}
 
         boolean headless = Boolean.parseBoolean(properties.getProperty("headless","false"));
+        int frameWidth = Integer.parseInt(properties.getProperty("frame-width"));
+        int frameHeight = Integer.parseInt(properties.getProperty("frame-height"));
+        boolean maximise = Boolean.parseBoolean(properties.getProperty("maximise", "false"));
 
         String downloadsDirectoryPath = new File("src/test/resources/files/downloads").getAbsolutePath();
         String downloadsDirectory = properties.getProperty("downloadsPath", downloadsDirectoryPath);
 
-            switch (driverType) {
+            switch (browserType) {
                 case chrome:
                     ChromeOptions options = new ChromeOptions();
                     Map<String, Object> prefs = new HashMap<>();
@@ -53,6 +57,8 @@ public class Driver {
 
             }
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+            driver.manage().window().setSize(new Dimension(frameWidth, frameHeight));
+            if (maximise) driver.manage().window().maximize();
         }
 
         public static void quitDriver() {

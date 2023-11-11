@@ -27,7 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static resources.Colors.*;
+import static java.awt.Color.*;
+import static org.apache.commons.net.smtp.SMTPCommand.RESET;
 
 
 public abstract class Utils extends WebComponent {
@@ -40,32 +41,32 @@ public abstract class Utils extends WebComponent {
     }
 
     public void waitFor(double seconds){
-        if (seconds > 1) log.new Info("Waiting for "+BLUE+seconds+GRAY+" seconds");
+        if (seconds > 1) log.info("Waiting for " + seconds + " seconds");
         try {Thread.sleep((long) (seconds* 1000L));}
-        catch (InterruptedException exception){Assert.fail(GRAY+exception.getLocalizedMessage()+RESET);}
+        catch (InterruptedException exception){Assert.fail(exception.getLocalizedMessage()+RESET);}
     }
 
     public void scroll(WebElement element) {
-        log.new Info("Scrolling to element");
+        log.info("Scrolling to element");
         ((JavascriptExecutor) Driver.driver).executeScript("arguments[0].scrollIntoView(true);", element);
     }
 
     public void scrollAndSendKeys(WebElement element, CharSequence... text) {
         scrollTowardCenter(element);
-        log.new Info("Submitting the given info");
+        log.info("Submitting the given info");
         element.sendKeys(text);
     }
 
     @Deprecated
     public void scrollAndClick(WebElement element) {
-        log.new Info("Scrolling toward element");
+        log.info("Scrolling toward element");
         scroll(element);
         //clickElementUntil(element);
     }
 
     public void clickAndDeleteAll(WebElement element) {
         clickElementUntil( element);
-        log.new Info("Deleting text");
+        log.info("Deleting text");
         element.sendKeys(Keys.COMMAND + "a", Keys.DELETE);
     }
 
@@ -143,7 +144,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public void scrollTowardCenter(WebElement element) {
-        log.new Info("Scrolling toward elements center");
+        log.info("Scrolling toward elements center");
         String scrollElementIntoMiddle = "var viewPortHeight = " +
                 "Math.max(document.documentElement.clientHeight, window.innerHeight || 0);"
                 + "var elementTop = arguments[0].getBoundingClientRect().top;"
@@ -159,7 +160,7 @@ public abstract class Utils extends WebComponent {
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
 
         try {
-            log.new Info("Waiting the element to be displayed");
+            log.info("Waiting the element to be displayed");
             fluentWait.until(webDriver -> element.isDisplayed());
         } catch (Exception e) {
             throw new RuntimeException("Exception occurred");
@@ -175,7 +176,7 @@ public abstract class Utils extends WebComponent {
                 .ignoring(NoSuchElementException.class, StaleElementReferenceException.class);
 
         try {
-            log.new Info("Waiting the element list to be displayed");
+            log.info("Waiting the element list to be displayed");
             fluentWait.until(ExpectedConditions.visibilityOfAllElements(elements));
         } catch (StaleElementReferenceException e) {
             throw new RuntimeException("Exception occurred: ", e);
@@ -185,7 +186,7 @@ public abstract class Utils extends WebComponent {
     public void waitUntilStable(WebElement element) {
         FluentWait<WebDriver> fluentWait = new FluentWait<>(Driver.driver);
 
-        log.new Info("Waiting " + element.getText() + " to be stable");
+        log.info("Waiting " + element.getText() + " to be stable");
         final long startTime = System.currentTimeMillis();
 
         fluentWait.withTimeout(Duration.ofSeconds(30))
@@ -196,7 +197,7 @@ public abstract class Utils extends WebComponent {
 
         long endTime = System.currentTimeMillis();
         int totalTime = (int) (endTime - startTime);
-        log.new Info("Waited for " + totalTime + " second(s)");
+        log.info("Waited for " + totalTime + " second(s)");
     }
 
     public void waitAndClickReCaptcha() {
@@ -209,7 +210,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public void addCookies(Cookie... cookies){
-        log.new Info("Adding specified cookies");
+        log.info("Adding specified cookies");
         for (Cookie cookie: cookies)
             Driver.driver.manage().addCookie(cookie);
     }
@@ -234,7 +235,7 @@ public abstract class Utils extends WebComponent {
     public void waitUntilDownloaded(String directory, String fileName) {
         long initialTime = System.currentTimeMillis();
         boolean timeOut;
-        log.new Info("Waiting the files existence");
+        log.info("Waiting the files existence");
 
             do {
                 timeOut = System.currentTimeMillis() - initialTime > 300000;
@@ -245,7 +246,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public void cleanDirectory(String directoryFilePath) {
-        log.new Info("Deleting all items from the given directory");
+        log.info("Deleting all items from the given directory");
         try {
             FileUtils.cleanDirectory(new File(directoryFilePath));
         }
@@ -265,7 +266,7 @@ public abstract class Utils extends WebComponent {
 
         if (scroll)
             scroll(element);
-        log.new Info("Clicking the element named: " + element.getText());
+        log.info("Clicking the element named: " + element.getText());
         while (System.currentTimeMillis() - startTime < duration) {
             try {
                 element.click();
@@ -286,7 +287,7 @@ public abstract class Utils extends WebComponent {
         int attemptCounter = 0;
         int duration = 30000;
 
-        log.new Info("Clicking the element named: " + element.getText());
+        log.info("Clicking the element named: " + element.getText());
         while (System.currentTimeMillis() - startTime < duration) {
             try {
                 element.click();
@@ -321,11 +322,11 @@ public abstract class Utils extends WebComponent {
             HttpGet request = new HttpGet(imgElement.getAttribute("src"));
             HttpResponse response = client.execute(request);
             String imgLink = imgElement.getAttribute("src");
-            log.new Info("Image Link: " + imgLink);
-            log.new Info("Status: " + response.getStatusLine());
+            log.info("Image Link: " + imgLink);
+            log.info("Status: " + response.getStatusLine());
             // print name
             //WebElement followingSibling = imgElement.findElement(By.xpath("following-sibling::*"));
-            //log.new Info("Image name: " + followingSibling.getText());
+            //log.info("Image name: " + followingSibling.getText());
 
             if (response.getStatusLine().getStatusCode() < 200) counter++;
             else if (response.getStatusLine().getStatusCode() > 226) counter++;
@@ -339,14 +340,14 @@ public abstract class Utils extends WebComponent {
             if(linkElement.getAttribute("href") != null) {
                 try {
                     String webLink = linkElement.getAttribute("href");
-                    log.new Info("Link: " + webLink);
+                    log.info("Link: " + webLink);
 
                     RequestConfig customizedRequestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build();
                     HttpClientBuilder customizedClientBuilder = HttpClients.custom().setDefaultRequestConfig(customizedRequestConfig);
                     CloseableHttpClient client = customizedClientBuilder.build();
                     HttpGet request = new HttpGet(webLink);
                     HttpResponse response = client.execute(request);
-                    log.new Info("Status: " + response.getStatusLine());
+                    log.info("Status: " + response.getStatusLine());
 
                     if (response.getStatusLine().getStatusCode() >= 400) counter++;
                 } catch (WebDriverException | IOException e) {
@@ -362,8 +363,8 @@ public abstract class Utils extends WebComponent {
                 try {
                     String webLink = linkElement.getAttribute("href");
                     String elementText = linkElement.getText();
-                    log.new Info("Element name: " + elementText);
-                    log.new Info("Link: " + webLink);
+                    log.info("Element name: " + elementText);
+                    log.info("Link: " + webLink);
 
                     RequestConfig customizedRequestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.IGNORE_COOKIES).build();
                     HttpClientBuilder customizedClientBuilder = HttpClients.custom().setDefaultRequestConfig(customizedRequestConfig);
@@ -404,14 +405,14 @@ public abstract class Utils extends WebComponent {
     public void tabSwitcher(int tabNumber) {
         TestStore.put("parentHandle", Driver.driver.getWindowHandle());
         List<String> browserTabs = new ArrayList<>(Driver.driver.getWindowHandles());
-        log.new Info(browserTabs.size());
+        log.info(String.valueOf(browserTabs.size()));
         Driver.driver.switchTo().window(browserTabs.get(tabNumber));
-        log.new Info("Tab focus switched");
+        log.info("Tab focus switched");
     }
 
     public String switchWindowByIndex(Integer expectedNumberOfWindows, Integer tabIndex) {
         new WebDriverWait(Driver.driver, Duration.ofSeconds(5000)).until(ExpectedConditions.numberOfWindowsToBe(expectedNumberOfWindows));
-        log.new Info("Switching the tab with the window index: " + tabIndex);
+        log.info("Switching the tab with the window index: " + tabIndex);
         String parentWindowHandle = Driver.driver.getWindowHandle();
         List<String> handles = new ArrayList<>(Driver.driver.getWindowHandles());
         String handle = handles.get(tabIndex);
@@ -420,7 +421,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public void windowSwitcher() {
-        log.new Info("Changing window focus");
+        log.info("Changing window focus");
         TestStore.put("parentWindow", Driver.driver.getWindowHandle());
         String currentWindow = Driver.driver.getWindowHandle();
         Set<String> handles = Driver.driver.getWindowHandles();
@@ -430,11 +431,11 @@ public abstract class Utils extends WebComponent {
                 break;
             }
         }
-        log.new Info("Window focus changed");
+        log.info("Window focus changed");
     }
 
     public void twoTabSwitcher() {
-        log.new Info("Changing window focus");
+        log.info("Changing window focus");
         new WebDriverWait(Driver.driver, Duration.ofSeconds(5000)).until(ExpectedConditions.numberOfWindowsToBe(2));
         TestStore.put("parentWindow", Driver.driver.getWindowHandle());
         String currentWindow = Driver.driver.getWindowHandle();
@@ -445,7 +446,7 @@ public abstract class Utils extends WebComponent {
                 break;
             }
         }
-        log.new Info("Window focus changed");
+        log.info("Window focus changed");
     }
 
     public void verifyTextOfListedElement(String labelText, List<WebElement> elements) {
@@ -453,7 +454,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public WebElement getElementFromList(String labelText, List<WebElement> elements) {
-        log.new Info("Getting '" + labelText + "' from the given list");
+        log.info("Getting '" + labelText + "' from the given list");
         for (WebElement element : elements){
             if (element.getText().equalsIgnoreCase(labelText)) return element;}
         throw new RuntimeException("Element not found!!");
@@ -462,7 +463,7 @@ public abstract class Utils extends WebComponent {
     public WebElement getElementFromListUntil(String labelText, List<WebElement> elements) {
         final long startTime = System.currentTimeMillis();
         int duration = 30000;
-        log.new Info("Getting '" + labelText + "' from the given list");
+        log.info("Getting '" + labelText + "' from the given list");
         while (System.currentTimeMillis() - startTime < duration){
             for (WebElement element : elements)
                 if (element.getText().equalsIgnoreCase(labelText)){
@@ -484,7 +485,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public void saveLinksToTextFile(String fileName, List<WebElement> elements) {
-        log.new Info("Saving links to a text file named: " + fileName);
+        log.info("Saving links to a text file named: " + fileName);
         File f = new File(fileName + ".txt");
         if (f.exists()) f.delete();
         try {
@@ -498,14 +499,14 @@ public abstract class Utils extends WebComponent {
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
-            log.new Info("Error!" + e.getMessage());
+            log.info("Error!" + e.getMessage());
         }
     }
 
     public List<String> readLinksOnBrowser(List<WebElement> elements) {
         List<String> linkList = new ArrayList<>();
         for (WebElement element : elements){
-            log.new Info(element.getAttribute("href"));
+            log.info(element.getAttribute("href"));
             linkList.add(element.getAttribute("href"));
         }
         return linkList;
@@ -529,7 +530,7 @@ public abstract class Utils extends WebComponent {
     }
 
     public void saveTextToTextFile(String fileName, String text) {
-        log.new Info("Saving text on a text file named: " + fileName);
+        log.info("Saving text on a text file named: " + fileName);
         File f = new File("src/test/resources/results/" + fileName + ".txt");
         try {
             FileWriter fw = new FileWriter(f, true);
@@ -538,12 +539,12 @@ public abstract class Utils extends WebComponent {
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
-            log.new Info("Error!" + e.getMessage());
+            log.info("Error!" + e.getMessage());
         }
     }
 
     public void setWindowSize(int width, int height) {
-        log.new Info("Changing the window size to " + width + "/" + height);
+        log.info("Changing the window size to " + width + "/" + height);
         Driver.driver.manage().window().setSize(new Dimension(width, height));
     }
 

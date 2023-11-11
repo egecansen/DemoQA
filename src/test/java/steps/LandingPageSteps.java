@@ -7,7 +7,7 @@ public class LandingPageSteps {
 
     LandingPage landingPage = new LandingPage();
 
-    @Given("Select the card named {} on the landing page")
+    @Given("Select the {} card on the landing page")
     public void clickCard(String labelText) {
         landingPage.clickElementUntil(landingPage.getElementFromList(labelText, landingPage.categories), true);
     }
