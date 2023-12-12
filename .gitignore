@@ -2,3 +2,4 @@
 /target/
 */.DS_Store/
 DemoQA.iml
+src/test/resources/secret.properties

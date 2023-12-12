@@ -1,7 +1,9 @@
 package steps;
 
 import io.cucumber.java.en.Given;
+import mail.EmailClient;
 import pages.DownloadAndUploadPage;
+import utils.PropertyUtility;
 
 import java.io.File;
 
@@ -24,6 +26,7 @@ public class DownloadAndUploadPageSteps {
         downloadAndUploadPage.log.new Info("Uploading...");
         downloadAndUploadPage.uploadBox.sendKeys(chosenFile);
         downloadAndUploadPage.cleanDirectory(downloadsDirectory);
+        EmailClient.sendEmail("The test is passed!","Success!", PropertyUtility.getProperty("receiver-email"), PropertyUtility.getProperty("email-secret"), PropertyUtility.getProperty("email-secret"));
     }
 
 }
