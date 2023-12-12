@@ -7,6 +7,7 @@ import bookstore.models.UserResponse;
 import driver.Driver;
 import io.cucumber.java.*;
 import io.cucumber.java.en.Given;
+import mail.EmailClient;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -58,10 +59,12 @@ public class CommonSteps extends Utils {
             captureScreen();
             Driver.quitDriver();
             log.new Error(scenario.getName() + ": FAILED!", null);
+            EmailClient.sendEmail("The test is failed!","Failed!", PropertyUtility.getProperty("receiver-email"), PropertyUtility.getProperty("sender-email"), PropertyUtility.getProperty("email-secret"));
         }
         if (initialiseBrowser && !scenario.isFailed()) {
             Driver.quitDriver();
             log.new Success(scenario.getName() + ": PASS!");
+            EmailClient.sendEmail("The test is passed!","Success!", PropertyUtility.getProperty("receiver-email"), PropertyUtility.getProperty("sender-email"), PropertyUtility.getProperty("email-secret"));
         }
     }
 
