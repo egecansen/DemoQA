@@ -29,4 +29,15 @@ jobs:
         receiver-email: ${{ RECEIVEREMAIL }}
         email-secret: ${{ EMAILSECRET }}
 
+        steps:
+          - shell: bash
+            env:
+              sender-email: ${{ secrets.SENDEREMAIL }}
+              receiver-email: ${{ secrets.RECEIVEREMAIL }}
+              email-secret: ${{ secrets.EMAILSECRET }}
+            run: |
+              example-command "$sender-email"
+              example-command "$sender-email"
+              example-command "$email-secret"
+
 
