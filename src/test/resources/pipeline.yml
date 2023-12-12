@@ -5,6 +5,7 @@ on:
     branches:
       - 'main'
 
+
 jobs:
 
   test:
@@ -22,7 +23,9 @@ jobs:
       - name: Maven Verify
         run: mvn -B clean verify
 
-        variables:
-          sender-email: "${{ SENDEREMAIL }}"
-          receiver-email: "${{ RECEIVEREMAIL }}"
-          email-secret: "${{ EMAILSECRET }}"
+    with: # Set the secret as an input
+        sender-email: "${{ SENDEREMAIL }}"
+        receiver-email: "${{ RECEIVEREMAIL }}"
+        email-secret: "${{ EMAILSECRET }}"
+          
+
