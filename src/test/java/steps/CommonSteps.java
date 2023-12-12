@@ -34,7 +34,7 @@ public class CommonSteps extends Utils {
 
     @Before
     public void before(Scenario scenario) {
-        log.new Warning("Running: " + scenario.getName());
+        log.warning("Running: " + scenario.getName());
         processScenarioTags(scenario);
         if (initialiseBrowser) Driver.setup(getBrowserType(scenario));
         if (authenticate) {
@@ -58,18 +58,18 @@ public class CommonSteps extends Utils {
         if (initialiseBrowser && scenario.isFailed()) {
             captureScreen();
             Driver.quitDriver();
-            log.new Error(scenario.getName() + ": FAILED!", null);
+            log.error(scenario.getName() + ": FAILED!", null);
             EmailClient.sendEmail("The test is failed!","Failed!", PropertyUtility.getProperty("receiver-email"), PropertyUtility.getProperty("sender-email"), PropertyUtility.getProperty("email-secret"));
         }
         if (initialiseBrowser && !scenario.isFailed()) {
             Driver.quitDriver();
-            log.new Success(scenario.getName() + ": PASS!");
+            log.success(scenario.getName() + ": PASS!");
             EmailClient.sendEmail("The test is passed!","Success!", PropertyUtility.getProperty("receiver-email"), PropertyUtility.getProperty("sender-email"), PropertyUtility.getProperty("email-secret"));
         }
     }
 
     public void processScenarioTags(Scenario scenario){
-        log.new Important(String.valueOf(scenario.getSourceTagNames()));
+        log.important(String.valueOf(scenario.getSourceTagNames()));
         this.scenario = scenario;
         authenticate = scenario.getSourceTagNames().contains("@Authenticate");
         initialiseBrowser = scenario.getSourceTagNames().contains("@Web-UI");
